@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="20086" systemVersion="21G83" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="JoyoKanji" representedClassName="JoyoKanji" syncable="YES" codeGenerationType="category">
+        <attribute name="gloss" optional="YES" attributeType="String"/>
+        <attribute name="glyph" optional="YES" attributeType="String"/>
+        <attribute name="grade" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="kanken" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="readings" optional="YES" attributeType="String"/>
+    </entity>
+    <elements>
+        <element name="JoyoKanji" positionX="-63" positionY="-9" width="128" height="118"/>
+    </elements>
+</model>
