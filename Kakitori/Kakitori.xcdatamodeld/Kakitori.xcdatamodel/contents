@@ -1,13 +1,39 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="20086" systemVersion="21G83" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="DrawnInput" representedClassName="DrawnInput" syncable="YES" codeGenerationType="category">
+        <attribute name="paths" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromData" customClassName="KakitoriLib.[PathObject]"/>
+        <relationship name="answerFor" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="QuizQuestion" inverseName="response" inverseEntity="QuizQuestion"/>
+    </entity>
     <entity name="JoyoKanji" representedClassName="JoyoKanji" syncable="YES" codeGenerationType="category">
         <attribute name="gloss" optional="YES" attributeType="String"/>
         <attribute name="glyph" optional="YES" attributeType="String"/>
         <attribute name="grade" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="kanken" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="readings" optional="YES" attributeType="String"/>
+        <relationship name="questions" optional="YES" toMany="YES" deletionRule="Deny" destinationEntity="QuizQuestion" inverseName="kanji" inverseEntity="QuizQuestion"/>
+    </entity>
+    <entity name="Quiz" representedClassName="Quiz" syncable="YES" codeGenerationType="category">
+        <attribute name="created" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="lastVisited" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="questions" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="QuizQuestion" inverseName="quiz" inverseEntity="QuizQuestion"/>
+        <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="quizzes" inverseEntity="User"/>
+    </entity>
+    <entity name="QuizQuestion" representedClassName="QuizQuestion" syncable="YES" codeGenerationType="category">
+        <attribute name="correct" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <relationship name="kanji" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="JoyoKanji" inverseName="questions" inverseEntity="JoyoKanji"/>
+        <relationship name="quiz" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Quiz" inverseName="questions" inverseEntity="Quiz"/>
+        <relationship name="response" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="DrawnInput" inverseName="answerFor" inverseEntity="DrawnInput"/>
+    </entity>
+    <entity name="User" representedClassName="User" syncable="YES" codeGenerationType="category">
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <relationship name="quizzes" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Quiz" inverseName="user" inverseEntity="Quiz"/>
     </entity>
     <elements>
-        <element name="JoyoKanji" positionX="-63" positionY="-9" width="128" height="118"/>
+        <element name="JoyoKanji" positionX="-107.0492553710938" positionY="-51.71200561523438" width="128" height="119"/>
+        <element name="User" positionX="200.6964721679688" positionY="-8.21038818359375" width="128" height="88"/>
+        <element name="QuizQuestion" positionX="-108.8671875" positionY="226.2191772460938" width="128" height="103"/>
+        <element name="DrawnInput" positionX="-136.8671264648438" positionY="427.6820068359375" width="128" height="73"/>
+        <element name="Quiz" positionX="213.5638427734375" positionY="154.8624572753906" width="128" height="103"/>
     </elements>
 </model>

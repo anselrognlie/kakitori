@@ -1,5 +1,5 @@
 //
-//  JoyoKanji+CoreDataClass.swift
+//  User+CoreDataClass.swift
 //  
 //
 //  Created by Ansel Rognlie on 9/6/22.
@@ -9,7 +9,7 @@
 import Foundation
 import CoreData
 
-@objc(JoyoKanji)
-public class JoyoKanji: NSManagedObject {
+@objc(User)
+public class User: NSManagedObject {
 
 }
