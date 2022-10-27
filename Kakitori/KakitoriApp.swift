@@ -13,8 +13,8 @@ struct KakitoriApp: App {
 
     var body: some Scene {
         WindowGroup {
-//            ContentView()
-//                .environment(\.managedObjectContext, persistenceController.container.viewContext)
+            ContentView()
+                .environment(\.managedObjectContext, persistenceController.container.viewContext)
 //            ItemCountListView(viewModel: viewModel)
 //            KvgWrapperView()
 //            DrawingPadWrapperView()
@@ -25,8 +25,8 @@ struct KakitoriApp: App {
 //                .environment(\.managedObjectContext, persistenceController.container.viewContext)
 //            InitializeQuizView()
 //                .environment(\.managedObjectContext, persistenceController.container.viewContext)
-            ShowQuizView()
-                .environment(\.managedObjectContext, persistenceController.container.viewContext)
+//            ShowQuizView()
+//                .environment(\.managedObjectContext, persistenceController.container.viewContext)
         }
     }
 }

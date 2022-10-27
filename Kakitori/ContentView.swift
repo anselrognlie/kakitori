@@ -14,6 +14,7 @@ struct ContentView: View {
     @FetchRequest(
 //        sortDescriptors: [NSSortDescriptor(keyPath: \JoyoKanji.glyph, ascending: true)],
         sortDescriptors: [],
+//        predicate: NSPredicate(format: "glyph == %@", "喩"),
 //        predicate: NSPredicate(format: "glyph == %@", "迷"),
 //        predicate: NSPredicate(format: "grade == %@", 1 as NSNumber),
         animation: .default)

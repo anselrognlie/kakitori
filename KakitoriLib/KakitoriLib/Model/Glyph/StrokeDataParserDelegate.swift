@@ -47,6 +47,14 @@ public enum KvgParsingError: Error {
     case invalidMove
     case invalidCurve
     case noData
+    case invalidData
+}
+
+public enum KvgCommand {
+    case move
+    case curve
+    case smooth
+    case unknown
 }
 
 func parseAttributes(_ attr: String) -> [String:String] {
@@ -209,45 +217,73 @@ public class StrokeDataParserDelegate: NSObject, XMLParserDelegate {
         let tokens = StrokePartTokenizer(dataAttr)
         var parts = [StrokePart]()
         var success = true
+        var done = false
+        var command = KvgCommand.unknown
+        var isRelative = false
 
-        while let cmd = tokens.nextCommand() {
-            var isRelative = false
+        while !done {
+            let nextPart = tokens.peekNext()
+
+            if nextPart == .unknown {
+                done = true
+                break
+            } else if nextPart == .command {
+                isRelative = false
+                let cmd = tokens.nextCommand()!
+
+                switch cmd {
+                case "m":
+                    isRelative = true
+                    fallthrough
+
+                case "M":
+                    command = .move
+                    break
+
+                case "c":
+                    isRelative = true
+                    fallthrough
+
+                case "C":
+                    command = .curve
+                    break
+
+                case "s":
+                    isRelative = true
+                    fallthrough
+
+                case "S":
+                    command = .smooth
+                    break
+
+                default:
+                    lastError = KvgParsingError.unknownCommand(command: String(cmd))
+                    return false
+                }
+            }
+
             var part: StrokePart?
             success = true
-
-            switch cmd {
-            case "m":
-                isRelative = true
-                fallthrough
-
-            case "M":
+            switch command {
+            case .move:
                 part = parseMoveToUsingTokenizer(tokens, offset: parts.count, relative: isRelative)
                 break
-
-            case "c":
-                isRelative = true
-                fallthrough
-
-            case "C":
+            case .curve:
                 part = parseCurveUsingTokenizer(tokens, offset: parts.count, relative: isRelative)
                 break
-
-            case "s":
-                isRelative = true
-                fallthrough
-
-            case "S":
+            case .smooth:
                 part = parseSmoothCurveUsingTokenizer(tokens, offset: parts.count, relative: isRelative)
                 break
-
-            default:
-                lastError = KvgParsingError.unknownCommand(command: String(cmd))
+            case .unknown:
+                lastError = KvgParsingError.invalidData
                 return false
             }
 
             if let part = part {
                 parts.append(part)
                 success = true
+            } else {
+                success = false
             }
         }
 

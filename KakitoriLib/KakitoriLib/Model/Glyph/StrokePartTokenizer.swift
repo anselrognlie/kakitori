@@ -7,6 +7,12 @@
 
 import Foundation
 
+public enum TokenType {
+    case command
+    case number
+    case unknown
+}
+
 func s_numberCharacter(_ c: Character) -> Bool {
     if (c >= "0" && c <= "9") {
         return true
@@ -19,6 +25,10 @@ func s_numberCharacter(_ c: Character) -> Bool {
         default:
             return false
     }
+}
+
+func s_commandCharacter(_ c: Character) -> Bool {
+    return (c >= "A" && c <= "Z") || (c >= "a" && c <= "z")
 }
 
 func s_dividerCharacter(_ c: Character) -> Bool {
@@ -56,6 +66,23 @@ func s_nextNumberCharIndex(_ str: String, _ position: String.Index) -> String.In
         let uc = str[afterDivider]
 
         if (s_numberCharacter(uc))
+        {
+            return afterDivider
+        }
+    }
+
+    return nil
+}
+
+func s_nextCommandCharIndex(_ str: String, _ position: String.Index) -> String.Index? {
+    let len = str.endIndex
+
+    let afterDivider = s_nextNotDividerIndex(str, position)
+
+    if (afterDivider < len) {
+        let uc = str[afterDivider]
+
+        if (s_commandCharacter(uc))
         {
             return afterDivider
         }
@@ -103,6 +130,28 @@ class StrokePartTokenizer {
         }
 
         return nil
+    }
+
+    func peekNext() -> TokenType {
+        let nextNumberPos = s_nextNumberCharIndex(sourceString, currentPosition)
+        let nextCommandPos = s_nextCommandCharIndex(sourceString, currentPosition)
+
+        if let nextNumberPos = nextNumberPos,
+            let nextCommandPos = nextCommandPos {
+            if nextNumberPos < nextCommandPos {
+                return .number
+            } else {
+                return .command
+            }
+        }
+
+        if nextNumberPos != nil {
+            return .number
+        } else if nextCommandPos != nil {
+            return .command
+        }
+
+        return .unknown
     }
 
     func nextNumber() -> Double {
